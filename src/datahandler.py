@@ -40,7 +40,7 @@ class Data:
 
         os.makedirs(f"{self.dataset_path}/train/{name}")
         dest_directory = f"{self.dataset_path}/train/{name}"
-        train = file_names[:len(file_names) // 70]
+        train = file_names[:int(len(file_names) * 0.7)]
 
         for i, file_name in enumerate(train):
             shutil.move(os.path.join(src_directory, file_name),
