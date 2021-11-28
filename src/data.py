@@ -1,5 +1,6 @@
 import os
 import shutil
+import kaggle
 
 
 class Data:
@@ -7,6 +8,20 @@ class Data:
         self.dataset_path = path
         self.labels = []
         self.get_labels()
+
+    def download_data(self) -> None:
+        if os.path.exists(self.dataset_path):
+            shutil.rmtree(self.dataset_path)
+
+        kaggle.api.authenticate()
+        kaggle.api.dataset_download_files('niteshfre/chessman-image-dataset', path=self.dataset_path, unzip=True)
+
+        source_dir = f'{self.dataset_path}/Chessman-image-dataset/Chess'
+
+        for file_name in os.listdir(source_dir):
+            shutil.move(os.path.join(source_dir, file_name), self.dataset_path)
+
+        shutil.rmtree(f'{self.dataset_path}/Chessman-image-dataset')
 
     def get_labels(self) -> None:
         self.labels = []

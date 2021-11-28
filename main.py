@@ -4,7 +4,7 @@ import src.test
 import src.train
 from src.data import Data
 
-
 if __name__ == '__main__':
     data = Data(f"{os.getcwd()}/data")
+    data.download_data()
     data.rearrange_directories(validate=True)
