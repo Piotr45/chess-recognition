@@ -10,7 +10,7 @@ import threading
 import os
 
 CHROMEDRIVER_EXE_PATH = "C:/Program Files (x86)/chromedriver.exe"
-EXTRA_DATA_FOLDER_PATH = "../extra_data"
+EXTRA_DATA_FOLDER_PATH = "extra_data"
 FIGURES = ["pawn", "rook", "knight", "bishop", "king", "queen"]
 
 
