@@ -2,8 +2,10 @@ import os
 import shutil
 import kaggle
 
+BANNED_EXTENSIONS = ['gif', 'fcgi', 'webp', 'php']
 
-class Data:
+
+class DataHandler:
     def __init__(self, path):
         self.dataset_path = path
         self.labels = []
@@ -37,6 +39,8 @@ class Data:
     def split_single_data(self, name: str, validate: bool = False) -> None:
         src_directory = f"{self.dataset_path}/{name}"
         file_names = os.listdir(src_directory)
+        file_names = [file_name for file_name in file_names if file_name.split('.')[1] not in BANNED_EXTENSIONS]
+        print(file_names)
 
         os.makedirs(f"{self.dataset_path}/train/{name}")
         dest_directory = f"{self.dataset_path}/train/{name}"
@@ -66,7 +70,7 @@ class Data:
             shutil.move(os.path.join(src_directory, file_name),
                         os.path.join(dest_directory, f"{i:04d}.jpg"))
 
-        os.rmdir(src_directory)
+        shutil.rmtree(src_directory)
 
     def rearrange_directories(self, validate: bool = False) -> None:
         self.create_directories()
