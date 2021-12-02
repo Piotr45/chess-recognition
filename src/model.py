@@ -114,7 +114,7 @@ class ModelHandler:
         print('Test accuracy:', score[1])
 
     def save_model(self):
-        tf.keras.models.save_model(self.model, f"{os.getcwd()}/models/chess_v{'x'}")
+        tf.keras.models.save_model(self.model, f"{os.getcwd()}/models/chess_v{'exp'}")
 
     def plot_predict(self):
         fig, ax = plt.subplots(nrows=3, ncols=3)
@@ -143,16 +143,15 @@ class ModelHandler:
         fig.savefig('prediction.png')
 
     def show_conf_matrix(self):
-        predictions = self.model.predict(self.test_ds.as_numpy_iterator())
-        predicted_labels = []
-        for p in predictions:
-            predicted_labels.append(np.minimum(5, np.argmax(p)))
-        predicted_labels = np.array(predicted_labels)
-        lst = []
+        predictions = []
+        real = []
         for image_batch, label_batch in self.test_ds.as_numpy_iterator():
-            for label in label_batch:
-                lst.append(np.minimum(5, label))
-        lst = np.array(lst)
-        ConfusionMatrixDisplay(np.array(tf.math.confusion_matrix(lst,
-                                                                 predicted_labels, num_classes=6))).plot()
+            prediction = []
+            for p in self.model.predict(image_batch):
+                prediction.append(np.argmax(p))
+            predictions = predictions + prediction
+            real = np.hstack((np.array(real), label_batch))
+
+        tf.math.confusion_matrix(real, predictions, num_classes=6)
+        ConfusionMatrixDisplay(np.array(tf.math.confusion_matrix(real, predictions, num_classes=6))).plot()
         plt.show()
